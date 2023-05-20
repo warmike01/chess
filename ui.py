@@ -1,13 +1,30 @@
 import chess
+import os.path
 from tkinter import *
-b=chess.board()
 root = Tk()     
 root.title("Chess Game")
 root.geometry("800x600")
-def square_pic(i: int, j: int):
+def square_pic(b: chess.board, i: int, j: int):
     square = b.board_state[i][j]
     color = (i + j) %2
     if square.s_piece !=0:
         return "{0}_{1}_{2}.PNG".format(square.s_piece, square.s_color, color)
     else:
-        return "0_{0}".format(color)
+        return "0_{0}.PNG".format(color)
+board_gfx=[]
+pics=[]
+def board_update(b: chess.board):
+    for i in range(len(board_gfx)):
+        board_gfx[i].destroy()
+    board_gfx.clear()
+    for i in range(7, -1, -1):
+        for j in range(8):
+            photo = PhotoImage(file=square_pic(b, i, j))
+            pics.append(photo)
+            t=Button(root, height=40, width=40, image=photo)
+            t.grid(row=7-i,column=j, sticky=W) 
+            #t.configure(command = lambda x=b, y=t: press (x, y ))
+            board_gfx.append(t)
+b=chess.board()
+board_update(b)
+root.mainloop()

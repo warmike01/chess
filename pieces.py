@@ -1,63 +1,65 @@
 class square:
     __s_rank: str
     __s_file: int
-    s_piece: int=0
+    s_piece: int
     def __init__(self, r: int, f: int):
         self.s_rank=r
         self.s_file=f
+        self.s_piece = 0
 class piece(square):
     __s_rank: str
     __s_file: int
     s_piece: int=-1
-    s_color: int #0 for white, 1 for black
-    def __init__(self, r: int, f: int, c: int):
-        s_color = c
+    s_color: int #1 for white, 0 for black
+    def __init__(self, r: int, f: int, c: int):       
         super().__init__(r, f)
+        self.s_piece = 0
+        self.s_color = c
 class pawn(piece):
     __s_rank: str
     __s_file: int
-    s_piece: int=1
+    s_piece: int
     s_color: int
     def __init__(self, r: int, f: int, c: int):
-        s_color = c
-        super().__init__(r, f)
+        super().__init__(r, f, c)
+        self.s_piece = 1
 class knight(piece):
     __s_rank: str
     __s_file: int
-    s_piece: int=2
+    s_piece: int
     s_color: int
     def __init__(self, r: int, f: int, c: int):
-        s_color = c
-        super().__init__(r, f)
+        super().__init__(r, f, c)
+        self.s_piece = 2
 class bishop(piece):
     __s_rank: str
     s_color: int
-    s_piece: int=3
+    s_piece: int
     __s_file: int
     def __init__(self, r: int, f: int, c: int):
-        s_color = c
-        super().__init__(r, f)
+        super().__init__(r, f, c)
+        self.s_piece = 3
 class rook(piece):
     __s_rank: str
     __s_file: int
-    s_piece: int=4
+    s_piece: int
     s_color: int
     def __init__(self, r: int, f: int, c: int):
-        s_color = c
-        super().__init__(r, f)
+        super().__init__(r, f, c)
+        self.s_piece = 4
 class queen(piece):
     __s_rank: str
     __s_file: int
-    s_piece: int=5
+    s_piece: int
     s_color: int
     def __init__(self, r: int, f: int, c: int):
-        s_color = c
-        super().__init__(r, f)
+        super().__init__(r, f, c)
+        self.s_piece = 5
 class king(piece):
     __s_rank: str
     __s_file: int
-    s_piece: int=6
+    s_piece: int
     s_color: int
     def __init__(self, r: int, f: int, c: int):
-        s_color = c
-        super().__init__(r, f)
+        super().__init__(r, f, c)
+        self.s_piece = 6

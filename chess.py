@@ -24,52 +24,53 @@ class board:
                     rank.append(p)
                     file_number += 1
             elif c == 'P':
-                p=pawn(rank_number, file_number, 0)
-                rank.append(p)
-                file_number += 1
-            elif c == 'p':
                 p=pawn(rank_number, file_number, 1)
                 rank.append(p)
                 file_number += 1
-            elif c == 'N':
-                p=knight(rank_number, file_number, 0)
+            elif c == 'p':
+                p=pawn(rank_number, file_number, 0)
                 rank.append(p)
                 file_number += 1
-            elif c == 'n':
+            elif c == 'N':
                 p=knight(rank_number, file_number, 1)
                 rank.append(p)
                 file_number += 1
-            elif c == 'B':
-                p=bishop(rank_number, file_number, 0)
+            elif c == 'n':
+                p=knight(rank_number, file_number, 0)
                 rank.append(p)
                 file_number += 1
-            elif c == 'b':
+            elif c == 'B':
                 p=bishop(rank_number, file_number, 1)
                 rank.append(p)
                 file_number += 1
-            elif c == 'R':
-                p=rook(rank_number, file_number, 0)
+            elif c == 'b':
+                p=bishop(rank_number, file_number, 0)
                 rank.append(p)
                 file_number += 1
-            elif c == 'r':
+            elif c == 'R':
                 p=rook(rank_number, file_number, 1)
                 rank.append(p)
                 file_number += 1
-            elif c == 'Q':
+            elif c == 'r':
                 p=rook(rank_number, file_number, 0)
                 rank.append(p)
                 file_number += 1
-            elif c == 'q':
+            elif c == 'Q':
                 p=queen(rank_number, file_number, 1)
                 rank.append(p)
                 file_number += 1
-            elif c == 'K':
-                p=king(rank_number, file_number, 0)
+            elif c == 'q':
+                p=queen(rank_number, file_number, 0)
                 rank.append(p)
                 file_number += 1
-            elif c == 'k':
+            elif c == 'K':
                 p=king(rank_number, file_number, 1)
                 rank.append(p)
                 file_number += 1
+            elif c == 'k':
+                p=king(rank_number, file_number, 0)
+                rank.append(p)
+                file_number += 1
+        self.board_state.insert(0, deepcopy(rank))
 
 
