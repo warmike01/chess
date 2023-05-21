@@ -21,32 +21,28 @@ def press(b: chess.board, t: Button):
     global ready_to_move
     x = t.grid_info()["column"] 
     y = 7-t.grid_info()["row"]
-    if ready_to_move:
-        """
-        try:
+    try:
+        if ready_to_move:
             moving_piece.move(y, x)
-        except IllegalMove as error:
-            error_popup(root, error)
-        else:
-            b.turn += 1
-        finally:
+            board_update(b)
             moving_piece = None
             ready_to_move = False
-            """
-    else:
-        try:
+        else:
             if b.board_state[y][x].s_piece == 0:
                 raise NoPiece
             elif b.board_state[y][x].s_color != b.turn % 2:
                 raise WrongPlayer
             else:
                 moving_piece = b.board_state[y][x]
-        except IllegalMove as error:
-            error_popup(root, error)
-        else:
-            ready_to_move = True
-
-    
+                ready_to_move = True
+    except IllegalMove as error:
+        moving_piece = None
+        ready_to_move = False
+        popup = Toplevel(root)
+        popup.geometry("300x60")
+        popup.title("Невозможный ход")
+        #Label(popup, text = error).pack()
+        #X = Button(popup, text="OK", command = popup.destroy).pack()
 def board_update(b: chess.board):
     for i in range(len(board_gfx)):
         board_gfx[i].destroy()

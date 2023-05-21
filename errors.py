@@ -1,3 +1,4 @@
+from tkinter import *
 class IllegalMove(Exception):
     def __str__(self): 
         return("Невозможный ход")
@@ -16,3 +17,9 @@ class RookIllegalMove(IllegalMove):
 class BishopIllegalMove(IllegalMove):
     def __str__(self): 
         return("Слон так не ходит")
+def error_popup(root: Tk, error: str):
+    popup = Toplevel(root)
+    popup.geometry("300x60")
+    popup.title("Невозможный ход")
+    Label(popup, text = error).pack()
+    X = Button(popup, text="OK", command = popup.destroy).pack()
