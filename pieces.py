@@ -1,3 +1,4 @@
+from errors import *
 class square:
     __s_rank: str
     __s_file: int

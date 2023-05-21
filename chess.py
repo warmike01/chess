@@ -1,5 +1,6 @@
 from copy import deepcopy
 from pieces import *
+from errors import *
 class board:
     board_state: square = []
     turn: int
@@ -72,5 +73,8 @@ class board:
                 rank.append(p)
                 file_number += 1
         self.board_state.insert(0, deepcopy(rank))
+        self.turn = (int(fen[5]) - 1) *2 +1
+        if fen[1] == 'b':
+            self.turn += 1
 
 
