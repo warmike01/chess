@@ -22,17 +22,16 @@ def press(b: chess.board, t: Button):
     x = t.grid_info()["column"] 
     y = 7-t.grid_info()["row"]
     if ready_to_move:
-        """
         try:
             moving_piece.move(y, x)
         except IllegalMove as error:
             error_popup(root, error)
         else:
             b.turn += 1
+            board_update(b)
         finally:
             moving_piece = None
             ready_to_move = False
-            """
     else:
         try:
             if b.board_state[y][x].s_piece == 0:
