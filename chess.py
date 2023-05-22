@@ -95,7 +95,7 @@ class piece(square):
         self.s_piece = 0
         self.s_color = c
     def move(self, t_rank,t_file):
-        if self.s_board.board_state[t_rank][t_file].s_piece != 0:
+        if self.s_board.board_state[t_rank][t_file].s_piece != 0: 
             if self.s_board.board_state[t_rank][t_file].s_color ==  self.s_color:
                 raise SelfCapture()
         self.s_board.board_state[self.s_rank][self.s_file] = square(self.s_rank, self.s_file)
@@ -138,6 +138,35 @@ class rook(piece):
     def __init__(self, b: board, r: int, f: int, c: int):
         super().__init__(b, r, f, c)
         self.s_piece = 4
+    def move(self, t_rank,t_file):
+        if self.s_rank == t_rank:
+            if self.s_file > t_file:
+                for i in range(t_file+1, self.s_file):
+                    if self.s_board.board_state[t_rank][i].s_piece != 0:
+                        raise RookIllegalMove
+                else:
+                    super().move(t_rank, t_file)
+            else:
+                for i in range(self.s_file+1, t_file):
+                    if self.s_board.board_state[t_rank][i].s_piece != 0:
+                        raise RookIllegalMove
+                else:
+                    super().move(t_rank, t_file)
+        elif self.s_file == t_file:
+            if self.s_rank > t_rank:
+                for i in range(t_rank+1, self.s_rank):
+                    if self.s_board.board_state[i][t_file].s_piece != 0:
+                        raise RookIllegalMove
+                else:
+                    super().move(t_rank, t_file)
+            else:
+                for i in range(self.s_rank+1, t_rank):
+                    if self.s_board.board_state[i][t_file].s_piece != 0:
+                        raise RookIllegalMove
+                else:
+                    super().move(t_rank, t_file)
+        else:
+            raise RookIllegalMove
 class queen(piece):
     __s_board: board
     __s_rank: str
