@@ -12,6 +12,12 @@ def square_pic(b: chess.board, i: int, j: int):
         return "resources/{0}_{1}_{2}.PNG".format(square.s_piece, square.s_color, color)
     else:
         return "resources/0_{0}.PNG".format(color)
+def error_popup(root: Tk, error: str):
+    popup = Toplevel(root)
+    popup.geometry("300x60")
+    popup.title("Невозможный ход")
+    Label(popup, text = error).pack()
+    X = Button(popup, text="OK", command = popup.destroy).pack()
 board_gfx=[]
 pics=[]
 moving_piece = None
