@@ -18,6 +18,17 @@ def error_popup(root: Tk, error: str):
     popup.title("Невозможный ход")
     Label(popup, text = error).pack()
     X = Button(popup, text="OK", command = popup.destroy).pack()
+def win(root: Tk, win_flag: int):
+    popup = Toplevel(root)
+    popup.geometry("300x60")
+    popup.title("Конец игры")
+    if win_flag == 1:
+        Label(popup, text = "Белые выиграли!").pack()
+    elif win_flag == 0:
+        Label(popup, text = "Черные выиграли!").pack()
+    else:
+        print(win_flag)
+    X = Button(popup, text="OK", command = popup.destroy).pack()
 board_gfx=[]
 pics=[]
 moving_piece = None
@@ -29,12 +40,14 @@ def press(b: chess.board, t: Button):
     y = 7-t.grid_info()["row"]
     if ready_to_move:
         try:
-            moving_piece.move(y, x)
+            ret=moving_piece.move(y, x)
         except IllegalMove as error:
             error_popup(root, error)
         else:
             b.turn += 1
             board_update(b)
+            if ret != -1:
+                win(root, ret)
         finally:
             moving_piece = None
             ready_to_move = False

@@ -98,10 +98,25 @@ class piece(square):
         if self.s_board.board_state[t_rank][t_file].s_piece != 0: 
             if self.s_board.board_state[t_rank][t_file].s_color ==  self.s_color:
                 raise SelfCapture()
+        if self.s_board.board_state[t_rank][t_file].s_piece == 6:
+            if self.s_board.board_state[t_rank][t_file].s_color == 1:
+                win_flag = 0
+            else:
+                win_flag = 1
+        else:
+            win_flag = -1
         self.s_board.board_state[self.s_rank][self.s_file] = square(self.s_rank, self.s_file)
         self.s_file=t_file
         self.s_rank=t_rank
         self.s_board.board_state[t_rank][t_file]=self
+        if self.s_board.board_state[t_rank][t_file].s_piece == 1:
+            if self.s_board.board_state[t_rank][t_file].s_color == 1 and t_rank == 7:
+                promotion = queen(self.s_board, 7, t_file, 1)
+                self.s_board.board_state[7][t_file] = promotion
+            elif self.s_board.board_state[t_rank][t_file].s_color == 0 and t_rank == 0:
+                promotion = queen(self.s_board, 0, t_file, 0)
+                self.s_board.board_state[0][t_file] = promotion
+        return win_flag
 class pawn(piece):
     __s_board: board
     __s_rank: str
@@ -115,20 +130,20 @@ class pawn(piece):
         if self.s_color == 1:
             if self.s_file == t_file and t_rank - self.s_rank == 1:
                 if self.s_board.board_state[t_rank][t_file].s_piece == 0:
-                    super().move(t_rank, t_file)
+                    return super().move(t_rank, t_file)
                 else:
                     raise PawnIllegalMove
             elif self.s_file == t_file and t_rank - self.s_rank == 2:
                 if self.s_board.board_state[t_rank][t_file].s_piece == 0 and self.s_rank == 1:
                     if self.s_board.board_state[2][t_file].s_piece == 0:
-                        super().move(t_rank, t_file)
+                        return super().move(t_rank, t_file)
                     else:
                         raise PawnIllegalMove
                 else:
                     raise PawnIllegalMove
             elif abs(t_file - self.s_file) == 1 and t_rank - self.s_rank == 1:
                 if self.s_board.board_state[t_rank][t_file].s_piece != 0:
-                    super().move(t_rank, t_file)
+                    return super().move(t_rank, t_file)
                 else:
                     raise PawnIllegalMove
             else:
@@ -136,20 +151,20 @@ class pawn(piece):
         else:
             if self.s_file == t_file and t_rank - self.s_rank == -1:
                 if self.s_board.board_state[t_rank][t_file].s_piece == 0:
-                    super().move(t_rank, t_file)
+                    return super().move(t_rank, t_file)
                 else:
                     raise PawnIllegalMove
             elif self.s_file == t_file and t_rank - self.s_rank == -2:
                 if self.s_board.board_state[t_rank][t_file].s_piece == 0 and self.s_rank == 6:
                     if self.s_board.board_state[5][t_file].s_piece == 0:
-                        super().move(t_rank, t_file)
+                        return super().move(t_rank, t_file)
                     else:
                         raise PawnIllegalMove
                 else:
                     raise PawnIllegalMove
             elif abs(t_file - self.s_file) == 1 and t_rank - self.s_rank == -1:
                 if self.s_board.board_state[t_rank][t_file].s_piece != 0:
-                    super().move(t_rank, t_file)
+                    return super().move(t_rank, t_file)
                 else:
                     raise PawnIllegalMove
             else:
@@ -165,9 +180,9 @@ class knight(piece):
         self.s_piece = 2
     def move(self, t_rank,t_file):
         if abs(self.s_rank - t_rank) == 2 and abs(self.s_file - t_file) == 1:
-            super().move(t_rank, t_file)
+            return super().move(t_rank, t_file)
         elif abs(self.s_rank - t_rank) == 1 and abs(self.s_file - t_file) == 2:
-            super().move(t_rank, t_file)
+            return super().move(t_rank, t_file)
         else:
             raise KnightIllegalMove
 class bishop(piece):
@@ -186,26 +201,26 @@ class bishop(piece):
                     if self.s_board.board_state[self.s_rank+i][self.s_file+i].s_piece != 0:
                         raise BishopIllegalMove
                 else:
-                    super().move(t_rank, t_file)
+                    return super().move(t_rank, t_file)
             else:
                 for i in range(1, self.s_rank - t_rank):
                     if self.s_board.board_state[self.s_rank-i][self.s_file-i].s_piece != 0:
                         raise BishopIllegalMove
                 else:
-                    super().move(t_rank, t_file)
+                    return super().move(t_rank, t_file)
         elif self.s_rank - t_rank == -( self.s_file - t_file):
             if self.s_rank < t_rank:
                 for i in range(1, abs(self.s_rank - t_rank)):
                     if self.s_board.board_state[self.s_rank+i][self.s_file-i].s_piece != 0:
                         raise BishopIllegalMove
                 else:
-                    super().move(t_rank, t_file)
+                    return super().move(t_rank, t_file)
             else:
                 for i in range(1, self.s_rank - t_rank):
                     if self.s_board.board_state[self.s_rank-i][self.s_file+i].s_piece != 0:
                         raise BishopIllegalMove
                 else:
-                    super().move(t_rank, t_file)
+                    return super().move(t_rank, t_file)
         else:
             raise BishopIllegalMove
 
@@ -225,26 +240,26 @@ class rook(piece):
                     if self.s_board.board_state[t_rank][i].s_piece != 0:
                         raise RookIllegalMove
                 else:
-                    super().move(t_rank, t_file)
+                    return super().move(t_rank, t_file)
             else:
                 for i in range(self.s_file+1, t_file):
                     if self.s_board.board_state[t_rank][i].s_piece != 0:
                         raise RookIllegalMove
                 else:
-                    super().move(t_rank, t_file)
+                    return super().move(t_rank, t_file)
         elif self.s_file == t_file:
             if self.s_rank > t_rank:
                 for i in range(t_rank+1, self.s_rank):
                     if self.s_board.board_state[i][t_file].s_piece != 0:
                         raise RookIllegalMove
                 else:
-                    super().move(t_rank, t_file)
+                    return super().move(t_rank, t_file)
             else:
                 for i in range(self.s_rank+1, t_rank):
                     if self.s_board.board_state[i][t_file].s_piece != 0:
                         raise RookIllegalMove
                 else:
-                    super().move(t_rank, t_file)
+                    return super().move(t_rank, t_file)
         else:
             raise RookIllegalMove
 class queen(piece):
@@ -263,52 +278,52 @@ class queen(piece):
                         if self.s_board.board_state[t_rank][i].s_piece != 0:
                             raise QueenIllegalMove
                     else:
-                        super().move(t_rank, t_file)
+                        return super().move(t_rank, t_file)
                 else:
                     for i in range(self.s_file+1, t_file):
                         if self.s_board.board_state[t_rank][i].s_piece != 0:
                             raise QueenIllegalMove
                     else:
-                        super().move(t_rank, t_file)
+                        return super().move(t_rank, t_file)
             elif self.s_file == t_file:
                 if self.s_rank > t_rank:
                     for i in range(t_rank+1, self.s_rank):
                         if self.s_board.board_state[i][t_file].s_piece != 0:
                             raise QueenIllegalMove
                     else:
-                        super().move(t_rank, t_file)
+                        return super().move(t_rank, t_file)
                 else:
                     for i in range(self.s_rank+1, t_rank):
                         if self.s_board.board_state[i][t_file].s_piece != 0:
                             raise QueenIllegalMove
                     else:
-                        super().move(t_rank, t_file)
+                        return super().move(t_rank, t_file)
             elif self.s_rank - t_rank == self.s_file - t_file:
                 if self.s_rank < t_rank:
                     for i in range(1, abs(self.s_rank - t_rank)):
                         if self.s_board.board_state[self.s_rank+i][self.s_file+i].s_piece != 0:
                             raise QueenIllegalMove
                     else:
-                        super().move(t_rank, t_file)
+                        return super().move(t_rank, t_file)
                 else:
                     for i in range(1, self.s_rank - t_rank):
                         if self.s_board.board_state[self.s_rank-i][self.s_file-i].s_piece != 0:
                             raise QueenIllegalMove
                     else:
-                        super().move(t_rank, t_file)
+                        return super().move(t_rank, t_file)
             elif self.s_rank - t_rank == -( self.s_file - t_file):
                 if self.s_rank < t_rank:
                     for i in range(1, abs(self.s_rank - t_rank)):
                         if self.s_board.board_state[self.s_rank+i][self.s_file-i].s_piece != 0:
                             raise QueenIllegalMove
                     else:
-                        super().move(t_rank, t_file)
+                        return super().move(t_rank, t_file)
                 else:
                     for i in range(1, self.s_rank - t_rank):
                         if self.s_board.board_state[self.s_rank-i][self.s_file+i].s_piece != 0:
                             raise QueenIllegalMove
                     else:
-                        super().move(t_rank, t_file)
+                        return super().move(t_rank, t_file)
             else:
                 raise QueenIllegalMove
 class king(piece):
@@ -322,7 +337,7 @@ class king(piece):
         self.s_piece = 6
     def move(self, t_rank, t_file):
         if abs(self.s_rank - t_rank) <= 1 and abs(self.s_file- t_file) <= 1:
-            super().move(t_rank, t_file)
+            return super().move(t_rank, t_file)
         else:
             raise KingIllegalMove
     
