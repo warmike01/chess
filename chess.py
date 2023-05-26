@@ -111,6 +111,49 @@ class pawn(piece):
     def __init__(self, b: board, r: int, f: int, c: int):
         super().__init__(b, r, f, c)
         self.s_piece = 1
+    def move(self, t_rank,t_file):
+        if self.s_color == 1:
+            if self.s_file == t_file and t_rank - self.s_rank == 1:
+                if self.s_board.board_state[t_rank][t_file].s_piece == 0:
+                    super().move(t_rank, t_file)
+                else:
+                    raise PawnIllegalMove
+            elif self.s_file == t_file and t_rank - self.s_rank == 2:
+                if self.s_board.board_state[t_rank][t_file].s_piece == 0 and self.s_rank == 1:
+                    if self.s_board.board_state[2][t_file].s_piece == 0:
+                        super().move(t_rank, t_file)
+                    else:
+                        raise PawnIllegalMove
+                else:
+                    raise PawnIllegalMove
+            elif abs(t_file - self.s_file) == 1 and t_rank - self.s_rank == 1:
+                if self.s_board.board_state[t_rank][t_file].s_piece != 0:
+                    super().move(t_rank, t_file)
+                else:
+                    raise PawnIllegalMove
+            else:
+                raise PawnIllegalMove
+        else:
+            if self.s_file == t_file and t_rank - self.s_rank == -1:
+                if self.s_board.board_state[t_rank][t_file].s_piece == 0:
+                    super().move(t_rank, t_file)
+                else:
+                    raise PawnIllegalMove
+            elif self.s_file == t_file and t_rank - self.s_rank == -2:
+                if self.s_board.board_state[t_rank][t_file].s_piece == 0 and self.s_rank == 6:
+                    if self.s_board.board_state[5][t_file].s_piece == 0:
+                        super().move(t_rank, t_file)
+                    else:
+                        raise PawnIllegalMove
+                else:
+                    raise PawnIllegalMove
+            elif abs(t_file - self.s_file) == 1 and t_rank - self.s_rank == -1:
+                if self.s_board.board_state[t_rank][t_file].s_piece != 0:
+                    super().move(t_rank, t_file)
+                else:
+                    raise PawnIllegalMove
+            else:
+                raise PawnIllegalMove
 class knight(piece):
     __s_board: board
     __s_rank: str
@@ -277,6 +320,11 @@ class king(piece):
     def __init__(self, b: board, r: int, f: int, c: int):
         super().__init__(b, r, f, c)
         self.s_piece = 6
+    def move(self, t_rank, t_file):
+        if abs(self.s_rank - t_rank) <= 1 and abs(self.s_file- t_file) <= 1:
+            super().move(t_rank, t_file)
+        else:
+            raise KingIllegalMove
     
 
 

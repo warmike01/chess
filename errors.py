@@ -28,7 +28,7 @@ class KnightIllegalMove(IllegalMove):
         return("Конь так не ходит")
 class PawnIllegalMove(IllegalMove):
     def __str__(self): 
-        return("Конь так не ходит")
+        return("Пешка так не ходит")
 class IllegalCastling(IllegalMove):
     def __str__(self): 
         return("Рокировка в эту сторону невозможна")
