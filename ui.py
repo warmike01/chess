@@ -28,7 +28,7 @@ def win(root: Tk, win_flag: int):
         Label(popup, text = "Черные выиграли!").pack()
     else:
         print(win_flag)
-    X = Button(popup, text="OK", command = popup.destroy).pack()
+    X = Button(popup, text="OK", command = quit).pack()
 board_gfx=[]
 pics=[]
 moving_piece = None

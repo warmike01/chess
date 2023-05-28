@@ -11,12 +11,33 @@ class square:
 class board:
     board_state: square = []
     turn: int
-    kingside_castling_white : bool = False
-    queenside_castling_white : bool = False
-    kingside_castling_black : bool = False
-    queenside_castling_black: bool = False
+    en_passant_rank : int
+    en_passant_file: int
+    kingside_castling_white : bool
+    queenside_castling_white : bool
+    kingside_castling_black : bool
+    queenside_castling_black: bool
     def __init__(self, fen: str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"):
         fen = fen.split()
+        self.turn = (int(fen[5]) - 1) *2 +1
+        if fen[1] == 'b':
+            self.turn += 1
+        if 'K' in fen[2]:
+            self.kingside_castling_white = True
+        else:
+            self.kingside_castling_white = False
+        if 'Q' in fen[2]:
+            self.queenside_castling_white = True
+        else:
+            self.queenside_castling_white = False
+        if 'k' in fen[2]:
+            self.kingside_castling_black = True
+        else:
+            self.kingside_castling_black = False
+        if 'q' in fen[2]:
+            self.queenside_castling_black = True
+        else:
+            self.queenside_castling_black = False
         rank_number=7
         file_number = 0
         rank=[]
@@ -80,9 +101,7 @@ class board:
                 rank.append(p)
                 file_number += 1
         self.board_state.insert(0, deepcopy(rank))
-        self.turn = (int(fen[5]) - 1) *2 +1
-        if fen[1] == 'b':
-            self.turn += 1
+        
 class piece(square):
     __s_board: board
     __s_rank: str
@@ -98,6 +117,23 @@ class piece(square):
         if self.s_board.board_state[t_rank][t_file].s_piece != 0: 
             if self.s_board.board_state[t_rank][t_file].s_color ==  self.s_color:
                 raise SelfCapture()
+        if self.s_piece == 6:
+            if self.s_color == 1:
+                self.s_board.kingside_castling_white = False
+                self.s_board.queenside_castling_white = False
+            else:
+                self.s_board.kingside_castling_black = False
+                self.s_board.queenside_castling_black = False
+        if self.s_rank == 0:
+            if self.s_file == 0:
+                self.s_board.queenside_castling_white = False
+            elif self.s_file == 7:
+                self.s_board.kingside_castling_white = False
+        if self.s_rank == 7:
+            if self.s_file == 0:
+                self.s_board.queenside_castling_black = False
+            elif self.s_file == 7:
+                self.s_board.kingside_castling_black = False
         if self.s_board.board_state[t_rank][t_file].s_piece == 6:
             if self.s_board.board_state[t_rank][t_file].s_color == 1:
                 win_flag = 0
@@ -338,6 +374,39 @@ class king(piece):
     def move(self, t_rank, t_file):
         if abs(self.s_rank - t_rank) <= 1 and abs(self.s_file- t_file) <= 1:
             return super().move(t_rank, t_file)
+        elif self.s_file == 4:
+            if self.s_rank == 0 and self.s_color == 1:
+                if t_rank == 0 and t_file == 6:
+                    if self.s_board.kingside_castling_white and self.s_board.board_state[0][5].s_piece == 0 and self.s_board.board_state[0][6].s_piece == 0:
+                        self.s_board.board_state[0][7].move(0, 5)
+                        return super().move(t_rank, t_file)
+                    else:
+                        raise IllegalCastling
+                elif t_rank == 0 and t_file == 2:
+                    if self.s_board.queenside_castling_white and self.s_board.board_state[0][3].s_piece == 0 and self.s_board.board_state[0][3].s_piece == 0:
+                        self.s_board.board_state[0][0].move(0, 3)
+                        return super().move(t_rank, t_file)
+                    else:
+                        raise IllegalCastling
+                else:
+                    raise KingIllegalMove
+            elif self.s_rank == 7 and self.s_color == 0:
+                if t_rank == 7 and t_file == 6:
+                    if self.s_board.kingside_castling_black and self.s_board.board_state[7][5].s_piece == 0 and self.s_board.board_state[7][6].s_piece == 0:
+                        self.s_board.board_state[7][7].move(7, 5)
+                        return super().move(t_rank, t_file)
+                    else:
+                        raise IllegalCastling
+                elif t_rank == 7 and t_file == 2:
+                    if self.s_board.queenside_castling_black and self.s_board.board_state[7][3].s_piece == 0 and self.s_board.board_state[7][3].s_piece == 0:
+                        self.s_board.board_state[7][0].move(7, 3)
+                        return super().move(t_rank, t_file)
+                    else:
+                        raise IllegalCastling
+                else:
+                    raise KingIllegalMove
+            else:
+                raise KingIllegalMove
         else:
             raise KingIllegalMove
     
