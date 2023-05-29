@@ -12,9 +12,34 @@ while True:
 file_name="games/game{0}.csv".format(i)
 f=open(file_name, 'w+')
 f.close()
+b=chess.board()
 root = Tk()     
 root.title("Chess Game")
 root.geometry("800x600")
+def hint():
+    popup = Toplevel(root)
+    popup.geometry("640x80")
+    popup.title("Справка")
+    Label(popup, text = "Для ввода хода нажмите на фигуру, которой хотите походить, затем на поле, куда хотите походить. \n Чтобы выиграть, нужно побить короля противника. \n Партии записываются в папку games, находящуюся в папке с программой. \n (с) Михаил Клопов \n НИУ ИТМО, 2023").pack()
+    X = Button(popup, text="OK", command = popup.destroy).pack()
+def draw():
+    popup = Toplevel(root)
+    popup.geometry("300x80")
+    popup.title("Предложение ничьей")
+    Label(popup, text = "Вы действительно хотите согласиться на ничью?").pack()
+    Y = Button(popup, text="Да" )
+    Y.configure(command = lambda r=root,x=2: [popup.destroy,win(r, x)])
+    Y.pack()
+    N = Button(popup, text="Нет", command = popup.destroy).pack()
+def resign():
+    popup = Toplevel(root)
+    popup.geometry("300x80")
+    popup.title("Сдача")
+    Label(popup, text = "Вы действительно хотите сдаться?").pack()
+    Y = Button(popup, text="Да" )
+    Y.configure(command = lambda r=root,x=(b.turn+1) % 2: [popup.destroy,win(r, x)])
+    Y.pack()
+    N = Button(popup, text="Нет", command = popup.destroy).pack()
 def square_pic(b: chess.board, i: int, j: int):
     square = b.board_state[i][j]
     color = (i + j) %2
@@ -39,12 +64,18 @@ def win(root: Tk, win_flag: int):
         Label(popup, text = "Черные выиграли!").pack()
         l=["Result", "0", "1"]
     else:
-        l=["Result", "?", "?"]
+        Label(popup, text = "Ничья!").pack()
+        l=["Result", "0.5", "0.5"]
     f=open(file_name, 'a')
     writer=csv.writer(f)
     writer.writerow(l)
     f.close()
     X = Button(popup, text="OK", command = quit).pack()
+mainmenu = Menu(root) 
+root.config(menu=mainmenu) 
+mainmenu.add_command(label="Предложить ничью", command = draw)
+mainmenu.add_command(label="Сдаться", command = resign)
+mainmenu.add_command(label="Справка", command = hint)
 board_gfx=[]
 pics=[]
 moving_piece = None
@@ -99,6 +130,5 @@ def board_update(b: chess.board):
             t.grid(row=7-i,column=j, sticky=W) 
             t.configure(command = lambda x=b, y=t: press (x, y ))
             board_gfx.append(t)
-b=chess.board()
 board_update(b)
 root.mainloop()
