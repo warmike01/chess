@@ -40,7 +40,6 @@ def win(root: Tk, win_flag: int):
         l=["Result", "0", "1"]
     else:
         l=["Result", "?", "?"]
-    print(win_flag)
     f=open(file_name, 'a')
     writer=csv.writer(f)
     writer.writerow(l)
