@@ -1,7 +1,17 @@
 import chess
-import os.path
+import csv
 from errors import *
 from tkinter import *
+from os.path import exists
+i=0
+while True:
+    if exists("games/game{0}.csv".format(i)):
+        i+=1
+    else:
+        break
+file_name="games/game{0}.csv".format(i)
+f=open(file_name, 'w+')
+f.close()
 root = Tk()     
 root.title("Chess Game")
 root.geometry("800x600")
@@ -24,10 +34,17 @@ def win(root: Tk, win_flag: int):
     popup.title("Конец игры")
     if win_flag == 1:
         Label(popup, text = "Белые выиграли!").pack()
+        l=["Result", "1", "0"]
     elif win_flag == 0:
         Label(popup, text = "Черные выиграли!").pack()
+        l=["Result", "0", "1"]
     else:
-        print(win_flag)
+        l=["Result", "?", "?"]
+    print(win_flag)
+    f=open(file_name, 'a')
+    writer=csv.writer(f)
+    writer.writerow(l)
+    f.close()
     X = Button(popup, text="OK", command = quit).pack()
 board_gfx=[]
 pics=[]
@@ -40,12 +57,18 @@ def press(b: chess.board, t: Button):
     y = 7-t.grid_info()["row"]
     if ready_to_move:
         try:
+            start = chr(moving_piece.s_file+97)+str(moving_piece.s_rank+1)
             ret=moving_piece.move(y, x)
         except IllegalMove as error:
             error_popup(root, error)
         else:
-            b.turn += 1
             board_update(b)
+            l=[str(b.turn), start, chr(x+97)+str(y+1)]
+            f=open(file_name, 'a')
+            writer=csv.writer(f)
+            writer.writerow(l)
+            f.close()
+            b.turn += 1
             if ret != -1:
                 win(root, ret)
         finally:

@@ -1,8 +1,8 @@
 from copy import deepcopy
 from errors import *
 class square:
-    __s_rank: str
-    __s_file: int
+    s_rank: str
+    s_file: int
     s_piece: int
     def __init__(self, r: int, f: int):
         self.s_rank=r
@@ -104,8 +104,8 @@ class board:
         
 class piece(square):
     __s_board: board
-    __s_rank: str
-    __s_file: int
+    s_rank: str
+    s_file: int
     s_piece: int=-1
     s_color: int #1 for white, 0 for black
     def __init__(self, b: board, r: int, f: int, c: int):       
@@ -155,8 +155,8 @@ class piece(square):
         return win_flag
 class pawn(piece):
     __s_board: board
-    __s_rank: str
-    __s_file: int
+    s_rank: str
+    s_file: int
     s_piece: int
     s_color: int
     def __init__(self, b: board, r: int, f: int, c: int):
@@ -207,8 +207,8 @@ class pawn(piece):
                 raise PawnIllegalMove
 class knight(piece):
     __s_board: board
-    __s_rank: str
-    __s_file: int
+    s_rank: str
+    s_file: int
     s_piece: int
     s_color: int
     def __init__(self, b: board, r: int, f: int, c: int):
@@ -223,10 +223,10 @@ class knight(piece):
             raise KnightIllegalMove
 class bishop(piece):
     __s_board: board
-    __s_rank: str
+    s_rank: str
     s_color: int
     s_piece: int
-    __s_file: int
+    s_file: int
     def __init__(self, b: board, r: int, f: int, c: int):
         super().__init__(b, r, f, c)
         self.s_piece = 3
@@ -262,8 +262,8 @@ class bishop(piece):
 
 class rook(piece):
     __s_board: board
-    __s_rank: str
-    __s_file: int
+    s_rank: str
+    s_file: int
     s_piece: int
     s_color: int
     def __init__(self, b: board, r: int, f: int, c: int):
@@ -300,8 +300,8 @@ class rook(piece):
             raise RookIllegalMove
 class queen(piece):
     __s_board: board
-    __s_rank: str
-    __s_file: int
+    s_rank: str
+    s_file: int
     s_piece: int
     s_color: int
     def __init__(self, b: board, r: int, f: int, c: int):
@@ -364,8 +364,8 @@ class queen(piece):
                 raise QueenIllegalMove
 class king(piece):
     __s_board: board
-    __s_rank: str
-    __s_file: int
+    s_rank: str
+    s_file: int
     s_piece: int
     s_color: int
     def __init__(self, b: board, r: int, f: int, c: int):
